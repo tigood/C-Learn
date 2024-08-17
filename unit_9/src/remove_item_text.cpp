@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <list>
 
 inline void show_item(const std::vector<int>& _ivect)
 {
@@ -45,9 +46,47 @@ void text_2()
         std::cout << "nihaoshijie" << std::endl;
 }
 
+void text_3()
+{
+    int ai[] = {1, 1, 2, 3, 4, 5, 6, 7};
+    std::vector<int> ivect;
+    std::list<int> ilist;
+    for (int item : ai)
+    {
+        ivect.push_back(item);
+        ilist.push_back(item);
+    }
+    // 遍历两个容器
+    for (auto it = ivect.begin(); it != ivect.end();)
+    {
+        if (*it % 2 == 0)
+        {
+            // 由于擦除数据之后之前的迭代器就会失效，所以通过返回值来更新it
+            it = ivect.erase(it); // 擦除数据
+        }
+        else
+        {
+            it++;
+        }
+    }
+    for (auto it = ilist.begin(); it != ilist.end();)
+    {
+        if (*it % 2 != 0)
+        {
+            it = ilist.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
+    show_item(ivect);
+}
+
 int main()
 {
-    text_1();
+    // text_1();
+    text_3();
 
     return 0;
 }
