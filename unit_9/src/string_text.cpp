@@ -57,8 +57,16 @@ void text_4()
     // find_last_of 与上面这个作用相反
     // find_last_not_of
     // find_first_not_of
+    // find() 是查找这里面的字符串或者字符第一次出现的位置
+    // 而find_first_of 或者 find_last_of等是查找，参数里面的任意一个字符第一次出现的位置或者最后一次出现的位置
     int a = 1;
     std::string str_3 = std::to_string(a);
+    // 上述的搜索方式都是接受一个args参数，然后如果没有搜索到的话就返回string::npos，该值为-1,在无符号类型中表示一个很大的值
+    // 这个args参数可以是以下这几中形式
+    // c, pos  pos默认为0,这两个参数的意思是从pos下标之后开始查询字符c
+    // s, pos  作用如上，从pos下标之后开始查询字符串s
+    // cp, pos 在字符串pos下标之后开始查找cp这个C语言风格的字符数组
+    // cp, pos, n  在字符串pos下标之后开始查找cp这个C语言风格的字符数组的前n个字符
 }
 
 void text_5()
