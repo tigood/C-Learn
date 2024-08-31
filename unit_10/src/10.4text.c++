@@ -157,6 +157,66 @@ void text_9(std::string in_file, std::string out_file1, std::string out_file2) {
     }
 }
 
+void show_vector_item(std::vector<int>& nums) {
+    for (auto& item : nums) {
+        std::cout << item << " ";
+    }
+    std::cout << std::endl;
+}
+
+void text_10() {
+    std::vector<int> nums({3, 2, 12, 4, 15});
+    // 使用反响迭代器
+    // 对反向迭代器使用++运算符，会递增到前一个元素位置
+    for (auto it = nums.crbegin(); it != nums.crend(); it++)
+    {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+    // 有了以上特性我们就可以显示的逆序对容器进行排序了
+    // 对容器进行顺序排序
+    std::cout << "对容器进行顺序排序：" << std::endl;
+    std::sort(nums.begin(), nums.end());
+    show_vector_item(nums);
+    // 对容器进行逆序排序
+    std::sort(nums.rbegin(), nums.rend());
+    std::cout << "对容器进行逆序排序：" << std::endl;
+    show_vector_item(nums);
+}
+
+void text_11() {
+    // 通过base()方法，可以将一个反向迭代器转换为一个正向迭代器
+    std::string line = "world,hello,ni,hao";
+    // 输出第一个单词
+    auto first_flag = std::find(line.cbegin(), line.cend(), ',');
+    std::cout << std::string(line.cbegin(), first_flag) << std::endl;
+    // 输出最后一个单词
+    auto last_flag = std::find(line.crbegin(), line.crend(),',');
+    // 这里注意一个点，不管是正向迭代器和反向迭代器都是左开右闭区间
+    // 所以在进行base转换后，他们指向往往不是同一个元素，而是相邻的一个元素
+    std::cout << std::string(last_flag.base(), line.cend()) << std::endl;
+}
+
+void text_12() {
+    std::vector<int> nums({1, 2, 3, 4});
+    for (auto it = nums.end() - 1; it >= nums.begin(); it--) {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
+
+void text_13() {
+    std::list<std::string> slist({"hello", "world", "hello", "ni", "hao", "hao"});
+    // 将列表根据字典序排序
+    slist.sort();
+    // 将列表去重
+    slist.unique();
+    for (auto& item : slist) {
+        std::cout << item << " ";
+    }
+    std::cout << std::endl;
+}
+
 int main() {
     // text_1();
     // text_2();
@@ -166,7 +226,11 @@ int main() {
     // text_6();
     // text_7();
     // text_8();
-    text_9("../src/nums.txt", "../src/jishu.txt", "../src/oushu.txt");
+    // text_9("../src/nums.txt", "../src/jishu.txt", "../src/oushu.txt");
+    // text_10();
+    // text_11();
+    // text_12();
+    text_13();
 
     return 0;
 }
