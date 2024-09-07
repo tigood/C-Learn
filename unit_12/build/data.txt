@@ -1,0 +1,4 @@
+hello world 
+tigood
+this is a text file
+and you are learning C++

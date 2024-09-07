@@ -2,9 +2,14 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <new>
+#include <fstream>
+
+class StrBlobPtr;
 
 class StrBlob {
 public:
+    friend class StrBlobPtr;
     typedef std::vector<std::string>::size_type size_type;
     StrBlob();  // 默认构造函数
     StrBlob(std::initializer_list<std::string> il);  // 传入一个构造列表的构造函数
@@ -19,11 +24,34 @@ public:
     // 对front()和back()的重载
     const std::string &front() const;
     const std::string &back() const;
+    // 返回首尾指针
+    StrBlobPtr begin();
+    StrBlobPtr end();
 
 private:
     std::shared_ptr<std::vector<std::string>> data;
     // 如果data[i]不可法，抛出一个异常
     void check(size_type i, const std::string &msg) const;
+};
+
+// 核查指针类
+class StrBlobPtr {
+public:
+    StrBlobPtr() : curr(0) {}
+    StrBlobPtr(StrBlob &a, size_t sz = 0) : wptr(a.data), curr(sz) {}
+    std::string &deref() const;
+    StrBlobPtr &incr(); // 前缀递增
+    friend class StrBlob;
+        // 友元函数声明
+    friend bool operator==(const StrBlobPtr& lhs, const StrBlobPtr& rhs);
+    friend bool operator!=(const StrBlobPtr& lhs, const StrBlobPtr& rhs);
+
+private:
+    // 若检查成功,check返回一个指向vector的shared_ptr
+    std::shared_ptr<std::vector<std::string>> check(std::size_t, const std::string &) const;
+    // 保存一个weak_ptr，意味着底层vector可能被销毁
+    std::weak_ptr<std::vector<std::string>> wptr;
+    std::size_t curr;
 };
 
 void
@@ -98,11 +126,66 @@ void shared_func_3(std::shared_ptr<std::vector<int>> ptr_ivect) {
     std::cout << std::endl;
 }
 
+// 12.1.4
+// struct destination;
+// struct connection {
+//     int id;
+// };
+// connection connect(destination *);
+// void disconnect(connection);
+
+// void f(destination &d) {
+//     connection c = connect(&d);
+//     // 使用连接
+//     // 如果我们在f退出前忘记调用disconnect，就无法关闭c了
+// }
+
+// // 使用智能指针
+
+// // 定义自己的删除器
+// void end_connection(connection *p) {
+//     disconnect(*p);
+// }
+
+// void use_shared_ptr(destination &d) {
+//     connection c = connect(&d);
+//     // 使用智能指针
+//     // std::shared_ptr<connection> p(&c, end_connection);
+
+//     // 使用lambda函数
+//     std::shared_ptr<connection> p(&c, [](connection *conn)
+//                                   { disconnect(*conn); });
+// }
+
+//12.20
+void text_3() {
+    std::string file_name;
+    // 创建两个类
+    StrBlob sblob = StrBlob();
+    std::cout << "请你输入你要读取的文件的名称：" << std::endl;
+    std::getline(std::cin, file_name);
+    // 创建一个该文件的读取流
+    std::ifstream read_file(file_name);
+    // 逐行读取文件
+    std::string line;
+    while (std::getline(read_file, line)) {
+        sblob.push_back(line);
+    }
+    // 再通过StrBlobPtr将字符串打印出来
+    auto end = sblob.end();
+    StrBlobPtr ptr = sblob.begin();
+    while (ptr != end) {
+        std::cout << ptr.deref() << std::endl;
+        ptr.incr();
+    }
+}
+
 int main() {
     // text_1();
     // text_2();
     // func_3(func_2(func_1()));
-    shared_func_3(shared_func_2(shared_func_1()));
+    // shared_func_3(shared_func_2(shared_func_1()));
+    text_3();
 
     return 0;
 }
@@ -147,3 +230,54 @@ void StrBlob::pop_back() {
     check(0, "试图对一个空对象执行pop_back()");
     data->pop_back();
 }
+
+StrBlobPtr
+StrBlob::begin() {
+    return StrBlobPtr(*this);
+}
+
+StrBlobPtr
+StrBlob::end() {
+    return StrBlobPtr(*this, data->size());
+}
+
+std::shared_ptr<std::vector<std::string>>
+StrBlobPtr::check(std::size_t i, const std::string &msg) const {
+    auto ret = wptr.lock();
+    // 检查是否正确的返回了
+    if (!ret) {
+        throw std::runtime_error("没有绑定的StrBolb指针");
+    }
+    if (i >= ret->size()) {
+        throw std::out_of_range(msg);
+    }
+
+    return ret;  // 否则，返回指向vector的shared_ptr
+}
+
+std::string&
+StrBlobPtr::deref() const {
+    auto p = check(curr, "检测失败");
+    return (*p)[curr];
+}
+
+StrBlobPtr&
+StrBlobPtr::incr() {
+    // 如果curr已经指向了绑定容器的末尾，就不能再递增他了
+    check(curr, "递增curr失败");
+    curr++;
+    return *this;
+}
+
+bool operator==(const StrBlobPtr& lhs, const StrBlobPtr& rhs) {
+    if (!lhs.wptr.expired() && !rhs.wptr.expired()) {
+        return (lhs.wptr.lock() == rhs.wptr.lock()) && (lhs.curr == rhs.curr);
+    } else {
+        return false;
+    }
+}
+
+bool operator!=(const StrBlobPtr& lhs, const StrBlobPtr& rhs) {
+    return !(lhs == rhs);
+}
+
