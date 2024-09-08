@@ -8,11 +8,12 @@ void text_1() {
     p1.showContent();
 }
 
-void f(const X &rx, X x) {
+void f(const X &rx, X x) {  // 发生一次拷贝构造函数
     std::vector<X> vec;
     vec.reserve(2);
-    vec.push_back(rx);
-    vec.push_back(x);
+    vec.push_back(rx);  // 发生一次拷贝构造函数
+    vec.push_back(x);  // 发生一次拷贝构造函数
+    // 该函数结束之后,传入参数x被析构,容器中的两个元素被析构,一共析构三次
 }
 
 int main() {
@@ -21,7 +22,7 @@ int main() {
     // std::cout << "Done!" << std::endl;
     X *px = new X;
     f(*px, *px);
-    delete px;
+    delete px;  // 这里再析构一次
 
     return 0;
 }

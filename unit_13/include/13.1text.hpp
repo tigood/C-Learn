@@ -44,6 +44,8 @@ class Employee{
 public:
     Employee();
     Employee(const std::string &name);
+    Employee(const Employee &) = delete;
+    Employee &operator=(const Employee &) = delete;
     int id() const { return no_; }
 
 private:
