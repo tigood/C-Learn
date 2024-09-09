@@ -13,6 +13,7 @@ public:
     typedef std::vector<std::string>::size_type size_type;
     StrBlob();  // 默认构造函数
     StrBlob(std::initializer_list<std::string> il);  // 传入一个构造列表的构造函数
+    StrBlob(const StrBlob &);  // 拷贝构造函数
     size_type size() const { return data->size(); }
     bool empty() const { return data->empty(); }
     // 添加和删除元素
@@ -27,6 +28,8 @@ public:
     // 返回首尾指针
     StrBlobPtr begin();
     StrBlobPtr end();
+    // 拷贝运算符
+    StrBlob &operator=(const StrBlob &);
 
 private:
     std::shared_ptr<std::vector<std::string>> data;
@@ -229,6 +232,17 @@ const std::string& StrBlob::back() const {
 void StrBlob::pop_back() {
     check(0, "试图对一个空对象执行pop_back()");
     data->pop_back();
+}
+
+// 拷贝构造函数
+StrBlob::StrBlob(const StrBlob&other):
+    data(std::make_shared<std::vector<std::string>>(*other.data)) {}
+
+// 拷贝运算符
+StrBlob&
+StrBlob::operator=(const StrBlob &other) {
+    data = std::make_shared<std::vector<std::string>>(*other.data);
+    return *this;
 }
 
 StrBlobPtr
