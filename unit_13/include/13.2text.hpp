@@ -13,6 +13,8 @@ public:
     HasPtr& operator=(const HasPtr&);
     // 析构函数
     ~HasPtr();
+    // 友元函数
+    friend void swap(HasPtr &, HasPtr &);
 
 private:
     std::string *ps;

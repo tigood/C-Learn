@@ -51,3 +51,15 @@ BinStrTree::operator=(const BinStrTree &other) {
     root = new TreeNode(*other.root);
     return *this;
 }
+
+// HasPtr的交换函数
+// 如果我们不定义这个swap交换函数，HasPtr类就会使用系统内置的swap函数
+// 因为这个一个类值对象，拷贝的时候时重新开辟空间的，所以交换时就会进行不必要的拷贝
+// 我们交换只是希望交换指针的值，所以需要我们自己自定义一个swap函数
+inline
+void swap(HasPtr &lhs, HasPtr &rhs) {
+    // 使用内置的swap函数交换两个属性的值
+    std::swap(lhs.ps, rhs.ps);
+    std::swap(lhs.i, rhs.i);
+    std::cout << "数据交换成功";
+}
