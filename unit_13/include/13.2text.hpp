@@ -9,8 +9,14 @@ public:
         ps(new std::string(s)), i(0), use(new std::size_t(0)) {}
     // 拷贝构造函数
     HasPtr(const HasPtr &);
-    // 赋值拷贝符号
-    HasPtr& operator=(const HasPtr&);
+    // 移动构造函数
+    HasPtr(HasPtr &&rhs) noexcept : ps(rhs.ps), i(rhs.i) { rhs.ps = 0; }
+    // // 赋值拷贝符号
+    // HasPtr& operator=(const HasPtr&);
+    // 赋值运算符既是拷贝赋值运算符，也是移动赋值运算符
+    HasPtr &operator=(HasPtr rhs) { swap(*this, rhs);
+        return *this;
+    }
     // 析构函数
     ~HasPtr();
     // 友元函数

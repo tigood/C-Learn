@@ -13,21 +13,21 @@ HasPtr::~HasPtr() {
     }
 }
 
-// 拷贝运算符重载
-HasPtr&
-HasPtr::operator=(const HasPtr &other) {
-    // 递增右侧运算对象的引用计数
-    (*other.use)++;
-    if (--*use == 0) {
-        delete ps;
-        delete use;
-    }
-    // 将右侧对象拷贝到左侧
-    ps = other.ps;
-    i = other.i;
-    use = other.use;
-    return *this;
-}
+// // 拷贝运算符重载
+// HasPtr&
+// HasPtr::operator=(const HasPtr &other) {
+//     // 递增右侧运算对象的引用计数
+//     (*other.use)++;
+//     if (--*use == 0) {
+//         delete ps;
+//         delete use;
+//     }
+//     // 将右侧对象拷贝到左侧
+//     ps = other.ps;
+//     i = other.i;
+//     use = other.use;
+//     return *this;
+// }
 
 TreeNode&
 TreeNode::operator=(const TreeNode &other) {

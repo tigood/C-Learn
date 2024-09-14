@@ -9,7 +9,10 @@ public:
     StrVec():  // 默认构造函数
         elements_(nullptr), first_free_(nullptr), cap_(nullptr) {}
     StrVec(const StrVec &);  // 拷贝构造函数
-    StrVec(std::initializer_list<std::string>);  // 初始化列表构造对象
+    // 不抛出异常的移动构造函数和移动赋值运算都应该被声明为noexcept，表示这个函数不会抛出错误
+    StrVec(StrVec &&s) noexcept;  // 移动构造函数
+    StrVec &operator=(StrVec &&s) noexcept;  // 移动赋值运算符
+    StrVec(std::initializer_list<std::string>); // 初始化列表构造对象
     StrVec &operator=(const StrVec &); // 拷贝运算符重载
     ~StrVec();  // 析构函数
     // 公开方法

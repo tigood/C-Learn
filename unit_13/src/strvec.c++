@@ -87,3 +87,27 @@ StrVec &StrVec::operator=(const StrVec &other) {
 StrVec::~StrVec() {
     free();
 }
+
+// 移动构造函数的实现
+// 移动函数是不会抛出异常的，所以在这里使用noexcept声明来做到一个优化的效果
+StrVec::StrVec(StrVec &&s) noexcept:
+    elements_(s.elements_), first_free_(s.first_free_), cap_(s.cap_) {
+    // 让s处于一个这样的状态--对它执行析构函数是安全的
+    s.elements_ = s.first_free_ = s.cap_ = nullptr;
+}
+
+// 移动赋值运算的实现
+StrVec &StrVec::operator=(StrVec &&s) noexcept {
+    // 判断是不是自赋值
+    if (this != &s) {
+        // 释放原空间
+        free();
+        // 重新赋值新结构
+        elements_ = s.elements_;
+        first_free_ = s.first_free_;
+        cap_ = s.cap_;
+        // 将源对象设置为可析构状态
+        s.elements_ = s.first_free_ = s.cap_ = nullptr;
+    }
+    return *this;
+}
