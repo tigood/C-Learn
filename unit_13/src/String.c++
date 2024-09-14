@@ -29,7 +29,7 @@ String::String(const char *pch) {
     // 有参构造函数
     char *s1 = const_cast<char *>(pch);
     // 找到空字符\0
-    while (s1) {
+    while (*s1 != '\0') {
         ++s1;
     }
     range_initalizer(pch, ++s1);
@@ -51,6 +51,7 @@ String &String::operator=(const String &other) {
     elements_ = newData.first;
     end_ = newData.second;
     std::cout << "拷贝符号重载执行了" << std::endl;
+    return *this;
 }
 
 String::~String() {
