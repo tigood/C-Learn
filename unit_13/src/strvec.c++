@@ -28,24 +28,40 @@ void StrVec::free() {
     }
 }
 
+// void StrVec::reallocate() {
+//     // 重新分配一个更大的内存，并将新的数据放进去
+//     // 计算新的容量
+//     auto newCapacity = size() ? size() * 2 : 1;
+//     // 通过分配器开辟一个新的空间=
+//     auto newData = alloc.allocate(newCapacity);
+//     // 将数据从旧内存移动到新内存
+//     auto dest = newData;  // 指向新内存的首地址
+//     auto elem = elements_;  // 指向旧内存的首地址
+//     for (size_t i = 0; i != size(); ++i) {
+//         alloc.construct(dest++, std::move(*elem++));
+//     }
+//     // 释放空间
+//     free();
+//     // 更新我们的数据结构
+//     elements_ = newData;
+//     first_free_ = dest;
+//     cap_ = newData + newCapacity;
+// }
+
 void StrVec::reallocate() {
-    // 重新分配一个更大的内存，并将新的数据放进去
-    // 计算新的容量
-    auto newCapacity = size() ? size() * 2 : 1;
-    // 通过分配器开辟一个新的空间=
-    auto newData = alloc.allocate(newCapacity);
-    // 将数据从旧内存移动到新内存
-    auto dest = newData;  // 指向新内存的首地址
-    auto elem = elements_;  // 指向旧内存的首地址
-    for (size_t i = 0; i != size(); ++i) {
-        alloc.construct(dest++, std::move(*elem++));
-    }
-    // 释放空间
+    // 分配一个更大的内存，将数据存储进去，通过移动迭代器实现
+    auto newCapcity = size() ? size() * 2 : 1;
+    // 通过分配器开辟一块空间
+    auto newData = alloc.allocate(newCapcity);
+    // 将旧元素移动到新内存中去
+    // 这是使用的是移动迭代器
+    auto last = std::uninitialized_copy(std::make_move_iterator(begin()), std::make_move_iterator(end()), newData);
+    // 移动完毕了，释放旧内村
     free();
-    // 更新我们的数据结构
+    // 更新数据
     elements_ = newData;
-    first_free_ = dest;
-    cap_ = newData + newCapacity;
+    first_free_ = last;
+    cap_ = newData + newCapcity;
 }
 
 void StrVec::range_initialize(const std::string *b, const std::string *e) {

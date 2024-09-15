@@ -16,6 +16,11 @@ public:
         contents(str) {}
     // 拷贝构造函数
     Message(const Message &);
+    // 由于Message的移动操作会对Message中Folder列表进行更新，涉及到空间开辟操作，可能会抛出异常，所以这里不写noexcept了
+    // 移动构造函数
+    Message(Message &&);
+    // 移动运算符重载
+    Message &operator=(Message &&);
     // 拷贝运算符重载
     Message &operator=(const Message &);
     // 析构函数
@@ -32,6 +37,8 @@ private:
     void add_to_Folders(const Message &);
     // 从folders中删除本消息
     void remove_from_Folders();
+    // 辅助函数 将一个message的folder列表中的保存的message信息修改为另一个message对象信息
+    void move_Folders(Message *);
 
     void addFolder(Folder *);
     void remFolder(Folder *);

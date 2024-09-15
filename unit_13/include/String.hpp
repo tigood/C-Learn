@@ -8,6 +8,8 @@ public:
     String(): String("") {};  // 默认构造函数
     String(const char *);  // 有参构造函数
     String(const String &); // 拷贝构造函数
+    String(String &&) noexcept;  // 移动构造函数
+    String &operator=(String &&) noexcept; // 移动运算符重载
     String &operator=(const String &); // 拷贝符号重载
     ~String();  // 析构函数
 

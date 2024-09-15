@@ -1,6 +1,19 @@
 #include <iostream>
 #include "../include/13.5text.hpp"
 
+// 辅助函数的实现
+void Message::move_Folders(Message *m) {
+    // 首先将传入信息的文件列表移动给本Message对象
+    folders = std::move(m->folders);  // 使用set自带的移动运算符
+    // 将这个Folders列表中保存的message信息修改
+    for (auto item : folders) {
+        item->remMsg(m);
+        item->addMsg(this);
+    }
+    // 将移动源设置为可析构状态
+    m->folders.clear();
+}
+
 // Message类的实现
 // 拷贝构造函数
 Message::Message(const Message &other):
@@ -18,6 +31,23 @@ void Message::save(Folder &f) {
 void Message::remove(Folder &f) {
     folders.erase(&f);
     f.remMsg(this);
+}
+
+// 移动构造函数
+Message::Message(Message &&m) noexcept : contents(std::move(m.contents)) {
+    // 移动folder指针
+    move_Folders(&m);
+}
+
+// 移动运算符重载
+Message &Message::operator=(Message &&m) noexcept {
+    // 检查是否是自赋值
+    if (this != &m) {
+        remove_from_Folders();  // 清空自身状态
+        contents = std::move(m.contents);
+        move_Folders(&m);
+    }
+    return *this;
 }
 
 // 辅助函数

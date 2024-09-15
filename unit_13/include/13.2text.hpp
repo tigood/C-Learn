@@ -14,6 +14,7 @@ public:
     // // 赋值拷贝符号
     // HasPtr& operator=(const HasPtr&);
     // 赋值运算符既是拷贝赋值运算符，也是移动赋值运算符
+    // 因为这里的参数是不是一个引用,这里会进行实参的传递,如果实参是一个右值则会出发移动构造函数,否则则会出发拷贝构造函数
     HasPtr &operator=(HasPtr rhs) { swap(*this, rhs);
         return *this;
     }

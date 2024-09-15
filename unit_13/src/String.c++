@@ -58,3 +58,26 @@ String::~String() {
     // 析构函数
     free();
 }
+
+// 移动构造函数
+String::String(String &&s) noexcept : 
+    elements_(s.elements_), end_(s.end_) {
+    std::cout << "使用和移动构造函数" << std::endl;
+    // 将源移动对象设置可析构状态
+    s.elements_ = s.end_ = nullptr;
+}
+
+// 移动赋值运算符
+String &String::operator=(String &&s) noexcept {
+    // 检查是不是自拷贝
+    if (this != &s) {
+        // 首先释放自身
+        free();
+        elements_ = s.elements_;
+        end_ = s.end_;
+        // 将源对象设置为可析构状态
+        s.elements_ = s.end_ = nullptr;
+    }
+    std::cout << "使用了移动赋值运算符" << std::endl;
+    return *this;
+}

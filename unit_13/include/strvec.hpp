@@ -4,6 +4,8 @@
 #include <memory>
 #include <initializer_list>
 
+// 如果传入的实参是左值，则使用拷贝构造函数或者拷贝运算符，如果是右值，则使用移动构造函数或者移动赋值运算符
+// 如果一个类未定义移动相关的函数，那么即使实参是一个右值，依然会使用拷贝相关的函数
 class StrVec{
 public:
     StrVec():  // 默认构造函数
