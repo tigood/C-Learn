@@ -14,6 +14,10 @@ void text_1() {
     // 而在两个对象之间的拷贝的时候会使用拷贝构造函数
     v2 = v1;
     std::cout << "Done" << std::endl;
+    String s4("hello");
+    std::cout << s4 << std::endl;
+    std::cin >> s4;
+    std::cout << s4 << std::endl;
 }
 
 int main() {

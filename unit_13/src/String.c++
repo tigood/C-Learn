@@ -1,6 +1,7 @@
 #include "../include/String.hpp"
 #include <iostream>
 #include <algorithm>
+#include <string.h>
 
 std::allocator<char> String::alloc;
 // 辅助函数的实现
@@ -80,4 +81,49 @@ String &String::operator=(String &&s) noexcept {
     }
     std::cout << "使用了移动赋值运算符" << std::endl;
     return *this;
+}
+
+std::ostream &operator<<(std::ostream &os, const String &str) {
+    if (str.elements_) {  // 检查指针是否有效
+        os.write(str.elements_, str.end_ - str.elements_); // 输出字符串
+    }
+    return os;
+}
+
+std::istream &operator>>(std::istream &is, String &str) {
+    char buffer[1024]; // 临时缓冲区
+    is >> buffer; // 读取输入到缓冲区
+
+    // 这里可以添加逻辑来处理读取的字符串，例如分配内存和复制内容
+    str.free(); // 释放旧内存（如果有的话）
+    str.range_initalizer(buffer, buffer + strlen(buffer)); // 初始化新内容
+    return is;
+}
+
+bool operator==(const String &str1, const String &str2) {
+    // 比较长度
+    if (str1.end_ - str1.elements_ != str2.end_ - str2.elements_)
+        return false;
+    // 再比较内容
+    return (strncmp(str1.elements_, str2.elements_, str1.end_ - str1.elements_) == 0);
+}
+
+bool operator!=(const String &str1, const String &str2) {
+    return !(str1 == str2);
+}
+
+bool operator<(const String &str1, const String &str2) {
+    // 首先判断长度
+    size_t str1_length = str1.end_ - str1.elements_;
+    size_t str2_length = str2.end_ - str2.elements_;
+    if (str1_length != str2_length) {
+        return str1_length < str2_length;
+    }
+
+    // 再检测内存
+    return strncmp(str1.elements_, str2.elements_, str1_length) < 0;
+}
+
+bool operator>(const String &str1, const String &str2) {
+    return !(str1 == str2 || str1 < str2);
 }

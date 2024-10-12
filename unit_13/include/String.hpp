@@ -5,13 +5,20 @@
 // String类
 class String{
 public:
-    String(): String("") {};  // 默认构造函数
+    friend std::ostream &operator<<(std::ostream &, const String &);
+    friend std::istream &operator>>(std::istream &, String &);
+    friend bool operator==(const String &, const String &);
+    friend bool operator!=(const String &, const String &);
+    friend bool operator<(const String &, const String &);
+    friend bool operator>(const String &, const String &);
+    String() : String("") {}; // 默认构造函数
     String(const char *);  // 有参构造函数
     String(const String &); // 拷贝构造函数
     String(String &&) noexcept;  // 移动构造函数
     String &operator=(String &&) noexcept; // 移动运算符重载
     String &operator=(const String &); // 拷贝符号重载
-    ~String();  // 析构函数
+    // 输出运算符
+    ~String(); // 析构函数
 
 private:
     // 辅助函数
