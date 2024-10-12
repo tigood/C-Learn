@@ -17,6 +17,7 @@ public:
     String(String &&) noexcept;  // 移动构造函数
     String &operator=(String &&) noexcept; // 移动运算符重载
     String &operator=(const String &); // 拷贝符号重载
+    String &operator+=(const String &);
     // 输出运算符
     ~String(); // 析构函数
 

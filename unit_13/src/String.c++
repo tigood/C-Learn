@@ -83,6 +83,31 @@ String &String::operator=(String &&s) noexcept {
     return *this;
 }
 
+String &String::operator+=(const String &rhs) {
+    // 计算长度
+    size_t lhs_length = this->end_ - this->elements_;
+    size_t rhs_lenght = rhs.end_ - rhs.elements_;
+    size_t new_lenght = lhs_length + rhs_lenght;
+
+    // 开辟空间
+    char *new_elements = alloc.allocate(new_lenght + 1);
+    // 拷贝内容
+    memcpy(new_elements, this->elements_, lhs_length);
+    memcpy(new_elements + lhs_length, rhs.elements_, rhs_lenght);
+
+    // 添加结束字符
+    new_elements[new_lenght + 1] = '\0';
+
+    // 释放源内存
+    free();
+
+    // 重新修改指向
+    this->elements_ = new_elements;
+    this->end_ = new_elements + new_lenght;
+
+    return *this;
+}
+
 std::ostream &operator<<(std::ostream &os, const String &str) {
     if (str.elements_) {  // 检查指针是否有效
         os.write(str.elements_, str.end_ - str.elements_); // 输出字符串
