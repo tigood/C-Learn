@@ -1,0 +1,86 @@
+---
+# 基础风格基于现代LLVM风格，兼顾C/C++特性
+BasedOnStyle: LLVM  # 以 LLVM 风格为基础进行格式化
+
+# 通用格式化设置
+Language: Cpp               # 适用于 C++ 代码，同时兼容 C 语言
+Standard: Latest            # 自动检测并使用最新的 C/C++ 标准
+AccessModifierOffset: -4    # 访问修饰符（public/private/protected）相对类体的缩进，负值表示减少缩进
+ColumnLimit: 90             # 每行字符数限制，超过此限制会自动换行
+AlignAfterOpenBracket: Align  # `(` 之后的参数对齐
+AlignConsecutiveMacros: true  # 让连续的 `#define` 宏定义对齐
+AlignConsecutiveDeclarations: true  # 让连续的变量声明对齐
+AlignEscapedNewlines: Right  # 让多行宏定义（`\` 续行）在 `\` 处右对齐
+AlignOperands: Align  # 让换行的操作数对齐，例如长逻辑表达式
+AlignTrailingComments: true  # 让连续的行尾注释对齐
+AllowAllArgumentsOnNextLine: false  # 不允许函数调用的所有参数换到下一行
+AllowAllParametersOfDeclarationOnNextLine: false  # 不允许函数声明的所有参数换到下一行
+AllowShortBlocksOnASingleLine: Empty  # 允许空代码块 `{}` 直接写在一行
+AllowShortCaseLabelsOnASingleLine: true  # 允许 `case` 语句的标签在同一行
+# AllowShortFunctionsOnASingleLine: Inline  # 允许内联短函数写在一行（已被注释）
+AllowShortIfStatementsOnASingleLine: false  # 允许 `if` 语句单独一行（但 `else` 需换行）
+AllowShortLambdasOnASingleLine: All  # 允许所有短 Lambda 表达式写在一行
+AllowShortLoopsOnASingleLine: false  # 允许 `for`、`while`、`do-while` 循环写在一行
+BreakConstructorInitializersBeforeComma: false  # 不在逗号 `,` 之前换行（构造函数初始化列表）
+ConstructorInitializerAllOnOneLineOrOnePerLine: true  # 允许构造函数的初始化列表要么全在一行，要么每个参数独占一行
+
+# 大括号风格（折中方案）
+BreakBeforeBraces: Custom  # 使用自定义大括号规则
+BraceWrapping:
+  AfterClass: true  # 类定义 `{` 需换行
+  AfterControlStatement: MultiLine  # 控制语句 (`if`、`for`、`while`) 仅在多行时换行
+  AfterEnum: true  # 枚举 `{` 需换行
+  AfterFunction: true  # 函数定义 `{` 需换行
+  AfterNamespace: true  # 命名空间 `{` 需换行
+  AfterObjCDeclaration: true  # Objective-C 的类、协议等 `{` 需换行
+  AfterStruct: true  # 结构体 `{` 需换行
+  AfterUnion: true  # 联合体 `{` 需换行
+  BeforeCatch: true  # `catch` 之前换行
+  BeforeElse: true  # `else` 之前换行
+  IndentBraces: false  # `{}` 本身不额外增加缩进
+  SplitEmptyRecord: true  # 允许 `{}` 独立一行（用于空的 `struct` 或 `class`）
+  SplitEmptyFunction: false  # 允许 `{}` 紧跟在函数定义后
+  SplitEmptyNamespace: false  # 允许 `{}` 紧跟在命名空间定义后
+
+# 指针和引用对齐
+PointerAlignment: Right  # 指针 `*` 或 `&` 靠近变量名（如 `int* ptr` 而不是 `int *ptr`）
+DerivePointerAlignment: false  # 不自动推导指针对齐风格
+
+# 空格控制
+SpaceAfterCStyleCast: true  # C 风格强制类型转换 `()` 之后加空格（如 `(int) x`）
+SpaceAfterLogicalNot: false  # 逻辑非 `!` 之后不加空格（如 `!flag` 而不是 `! flag`）
+SpaceAfterTemplateKeyword: false  # `template` 关键字后不加空格
+SpaceBeforeAssignmentOperators: true  # 赋值操作符 `=` 前加空格（如 `a = b`）
+SpaceBeforeCpp11BracedList: false  # C++11 花括号初始化 `{}` 之前不加空格
+SpaceBeforeInheritanceColon: true  # 继承 `:` 之前加空格（如 `class A : public B`）
+SpaceBeforeParens: ControlStatements  # 仅在控制语句 (`if`、`for`、`while`) 的 `()` 之前加空格
+SpaceBeforeRangeBasedForLoopColon: true  # 范围 `for` 循环的 `:` 之前加空格（如 `for (auto x : container)`）
+SpaceInEmptyParentheses: false  # 空括号 `()` 内不加空格
+SpacesInAngles: Never  # `<>` 之间不加空格（如 `std::vector<int>`）
+SpacesInContainerLiterals: false  # `{}` 初始化列表内部不加空格
+SpacesInCStyleCastParentheses: false  # C 风格强制类型转换 `()` 内不加空格
+SpacesInParentheses: false  # `()` 内不加空格
+SpacesInSquareBrackets: false  # `[]` 内不加空格
+
+# 缩进设置
+IndentWidth: 4  # 使用 4 个空格进行缩进
+TabWidth: 4  # Tab 等价于 4 个空格
+UseTab: Never  # 不使用 Tab，统一用空格进行缩进
+
+# C++ 特定设置（自动忽略 C 文件）
+AlwaysBreakTemplateDeclarations: Yes  # 模板声明 `template<>` 必须换行
+FixNamespaceComments: true  # 自动给 `namespace` 结束 `}` 添加注释
+NamespaceIndentation: All  # `namespace` 内部所有代码都缩进
+Cpp11BracedListStyle: true  # C++11 `std::initializer_list` `{}` 统一格式化
+IncludeBlocks: Regroup  # 重新整理 `#include` 的分组
+IncludeCategories:
+  - Regex: '^<.*\.h>'  # 标准库头文件 `<xxx.h>` 归类优先级 1
+    Priority: 1
+  - Regex: '^<.*'  # 其它标准库头文件 `<xxx>` 归类优先级 2
+    Priority: 2
+  - Regex: '.*'  # 其它用户头文件 `"xxx.h"` 归类优先级 3
+    Priority: 3
+
+# C 特定设置（自动忽略 C++ 文件）
+IndentGotoLabels: true  # `goto` 标签要缩进
+IndentExternBlock: AfterExternBlock  # `extern "C" {}` 代码块中的代码要缩进

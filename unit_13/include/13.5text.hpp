@@ -1,3 +1,13 @@
+/*
+ * @Author: tigood 3020422083@qq.com
+ * @Date: 2024-09-11 15:30:04
+ * @LastEditors: tigood 3020422083@qq.com
+ * @LastEditTime: 2025-02-08 00:01:11
+ * @FilePath: /C++Primer/unit_13/include/13.5text.hpp
+ * @Description:
+ *
+ * Copyright (c) 2025 by tigood, All Rights Reserved.
+ */
 #ifndef _13_5_TEXT
 #define _13_5_TEXT
 #include <iostream>
@@ -6,14 +16,16 @@
 class Folder;
 
 // Message类
-class Message{
+class Message
+{
     friend void swap(Message &, Message &);
     friend class Folder;
 
 public:
     // folders被隐式的初始化为空集合
-    explicit Message(const std::string &str = ""):
-        contents(str) {}
+    explicit Message(const std::string &str = "")
+        : contents(str)
+    {}
     // 拷贝构造函数
     Message(const Message &);
     // 由于Message的移动操作会对Message中Folder列表进行更新，涉及到空间开辟操作，可能会抛出异常，所以这里不写noexcept了
@@ -30,14 +42,15 @@ public:
     void remove(Folder &);
 
 private:
-    std::string contents;  // 实际文本消息
-    std::set<Folder *> folders;  // 包含本消息的文件夹集合
+    std::string contents;       // 实际文本消息
+    std::set<Folder *> folders; // 包含本消息的文件夹集合
     // 在析构函数和拷贝构造函数和赋值拷贝运算符重载中用到的辅助函数
     // 将本消息添加到指定参数的Folder列表中
     void add_to_Folders(const Message &);
     // 从folders中删除本消息
     void remove_from_Folders();
-    // 辅助函数 将一个message的folder列表中的保存的message信息修改为另一个message对象信息
+    // 辅助函数
+    // 将一个message的folder列表中的保存的message信息修改为另一个message对象信息
     void move_Folders(Message *);
 
     void addFolder(Folder *);
@@ -47,23 +60,24 @@ private:
 void swap(Message &, Message &);
 
 // Folder类
-class Folder{
+class Folder
+{
     friend void swap(Folder &, Folder &);
     friend class Message;
 
 public:
-    Folder() = default;                                       // 默认构造函数
-    Folder(const Folder &other);                              // 拷贝构造函数
+    Folder() = default;          // 默认构造函数
+    Folder(const Folder &other); // 拷贝构造函数
     // 赋值拷贝重载符
     Folder &operator=(const Folder &);
     // 析构函数
     ~Folder();
-    
+
     // 调试方法
     void print_debug();
 
 private:
-    std::set<Message *> messages;  // 该文件夹包含的所有消息的集合
+    std::set<Message *> messages; // 该文件夹包含的所有消息的集合
 
     // 辅助函数
     // 将该目录指针添加到指针目录的消息列表中

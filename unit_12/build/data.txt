@@ -2,3 +2,5 @@ hello world
 tigood
 this is a text file
 and you are learning C++ hello
+ni hao zhe ge shi jie
+I will become a good c++ user.

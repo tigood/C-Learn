@@ -16,7 +16,7 @@ int main() {
     {
         std::cout << "请输入您要查询的单词，输入q退出：" << std::endl;
         if (!(std::cin >> target_word) || target_word == "q") break;
-        print(std::cout, tq.query(target_word));
         std::cout << std::endl;
+        print(std::cout, tq.query(target_word));
     }
 }
